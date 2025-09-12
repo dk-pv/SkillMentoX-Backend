@@ -4,7 +4,8 @@ import {
   deleteMentorDocument,
   getMentorProfile,
   getMentorRequests,
-  getMentorDetails
+  getMentorDetails,
+  updateMentorRequestStatus
 } from "../controllers/mentorController.js";
 import { protect, authorize } from "../middleware/authMiddleware.js";
 import upload from "../middleware/upload.js";
@@ -46,5 +47,33 @@ router.get(
   authorize("admin"),
   getMentorDetails    
 );
+
+// Approve Request
+router.put(
+  "/admin/approve-request/:id",
+  protect,
+  authorize("admin"),
+  async (req, res) => {
+    req.body.newStatus = "approved";
+    await updateMentorRequestStatus(req, res);
+  }
+);
+
+// Reject Request
+router.put(
+  "/admin/reject-request/:id",
+  protect,
+  authorize("admin"),
+  async (req, res) => {
+    req.body.newStatus = "rejected";
+    await updateMentorRequestStatus(req, res);
+  }
+);
+
+
+
+
+
+
 
 export default router;
