@@ -10,7 +10,7 @@ const mentorRequestSchema = new mongoose.Schema(
     action: { type: String, enum: ["create", "update"], required: true },
     status: {
       type: String,
-      enum: ["pending", "approved", "Get Ready for Interview"],
+      enum: ["pending", "approved", "rejected"],
       default: "pending",
     },
     createdAt: { type: Date, default: Date.now },

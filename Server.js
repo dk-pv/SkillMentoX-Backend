@@ -5,6 +5,7 @@ import authRoutes from "./routes/authRoutes.js";
 import connectDB from "./config/db.js";
 import mentorRoutes from "./routes/mentorRoutes.js";
 import StudentRoutes from "./routes/StudentRoutes.js";
+import adminRoutes from './routes/adminRoutes.js'
 
 dotenv.config();
 const app = express();
@@ -25,8 +26,8 @@ app.use(express.urlencoded({ limit: "10mb", extended: true }));
 
 app.use("/api/auth", authRoutes);
 app.use("/api/mentor", mentorRoutes);
-
 app.use("/api/students",StudentRoutes)
+app.use('/api/admin', adminRoutes)
 
 
 const PORT = process.env.PORT || 9999;
