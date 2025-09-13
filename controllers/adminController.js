@@ -15,29 +15,6 @@ export const getMentorRequests = async (req, res) => {
 };
 
 
-export const getMentorDetails = async (req, res) => {
-  const { id } = req.params;
-
-  if (!mongoose.Types.ObjectId.isValid(id)) {
-    return res.status(400).json({ message: "Invalid mentor ID" });
-  }
-
-  try {
-    const mentor = await Mentor.findById(id);
-
-    if (!mentor) {
-      return res.status(404).json({ message: "Mentor not found" });
-    }
-
-    res.status(200).json({ success: true, data: mentor });
-  } catch (error) {
-    res.status(500).json({ message: "Server Error", error });
-  }
-};
-
-
-
-
 export const updateMentorRequestStatus = async (req, res) => {
   const { id } = req.params;
   const { newStatus } = req.body; // "approved" | "rejected"
@@ -83,5 +60,27 @@ export const updateMentorRequestStatus = async (req, res) => {
   } catch (error) {
     console.error("Error updating mentor request status:", error);
     return res.status(500).json({ message: "Server error", error });
+  }
+};
+
+
+
+export const getMentorDetails = async (req, res) => {
+  const { id } = req.params;
+
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return res.status(400).json({ message: "Invalid mentor ID" });
+  }
+
+  try {
+    const mentor = await Mentor.findById(id);
+
+    if (!mentor) {
+      return res.status(404).json({ message: "Mentor not found" });
+    }
+
+    res.status(200).json({ success: true, data: mentor });
+  } catch (error) {
+    res.status(500).json({ message: "Server Error", error });
   }
 };
