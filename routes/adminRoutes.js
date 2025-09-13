@@ -1,5 +1,5 @@
 import express from 'express'
-import { getMentorRequests, getMentorDetails, updateMentorRequestStatus } from '../controllers/adminController.js';
+import { getMentorRequests, getMentorDetails, updateMentorRequestStatus ,getApprovedMentors } from '../controllers/adminController.js';
 import { protect , authorize } from '../middleware/authMiddleware.js';
 
 const router = express.Router()
@@ -37,5 +37,6 @@ router.get(
   getMentorDetails    
 );
 
+router.get("/approved-mentors" , protect , authorize('admin') , getApprovedMentors)
 
 export default router;

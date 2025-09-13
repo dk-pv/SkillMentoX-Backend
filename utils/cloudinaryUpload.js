@@ -5,7 +5,7 @@ export const uploadBufferToCloudinary = (file, folder) =>
     const stream = cloudinary.uploader.upload_stream(
       {
         folder,
-        resource_type: "auto", // supports images, pdf, etc.
+        resource_type: "auto", 
       },
       (err, result) => {
         if (err) return reject(err);
@@ -13,5 +13,5 @@ export const uploadBufferToCloudinary = (file, folder) =>
       }
     );
 
-    stream.end(file.buffer); // push buffer to stream
+    stream.end(file.buffer); 
   });
