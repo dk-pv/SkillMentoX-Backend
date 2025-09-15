@@ -1,9 +1,7 @@
-import { sendEmail } from "../utils/sendMail.js"; 
+import { sendEmail } from "../utils/sendMail.js";
 import mongoose from "mongoose";
 import Mentor from "../models/mentor.js";
-import MentorRequest from "../models/MentorRequest.js"; 
-
-
+import MentorRequest from "../models/MentorRequest.js";
 
 export const getMentorRequests = async (req, res) => {
   try {
@@ -34,8 +32,6 @@ export const getMentorRequests = async (req, res) => {
     res.status(500).json({ success: false, message: err.message });
   }
 };
-
-
 
 export const updateMentorRequestStatus = async (req, res) => {
   const { id } = req.params;
@@ -77,15 +73,15 @@ export const updateMentorRequestStatus = async (req, res) => {
 
     return res.status(200).json({
       success: true,
-      message: `Mentor request ${newStatus}${newStatus === "rejected" ? " (soft deleted)" : ""} and email sent successfully.`,
+      message: `Mentor request ${newStatus}${
+        newStatus === "rejected" ? " (soft deleted)" : ""
+      } and email sent successfully.`,
     });
   } catch (error) {
     console.error("Error updating mentor request status:", error);
     return res.status(500).json({ message: "Server error", error });
   }
 };
-
-
 
 export const getMentorDetails = async (req, res) => {
   const { id } = req.params;
@@ -108,33 +104,49 @@ export const getMentorDetails = async (req, res) => {
 };
 
 
-
-
 export const getApprovedMentors = async (req, res) => {
   try {
-    // Get page & limit from query params
     const page = parseInt(req.query.page) || 1;
     const limit = parseInt(req.query.limit) || 10;
     const skip = (page - 1) * limit;
 
-    const total = await MentorRequest.countDocuments({
+    const { courseName, category } = req.query;
+
+    // Base filter (mentor requests)
+    const requestFilter = {
       status: "approved",
       isDeleted: false,
-    });
+    };
 
-    const approvedMentors = await MentorRequest.find({
-      status: "approved",
-      isDeleted: false,
-    })
-      .populate("mentorId")
-      .skip(skip)
-      .limit(limit);
+    // Get only approved requests (with mentorId populated)
+    let query = MentorRequest.find(requestFilter).populate("mentorId");
 
-    const mentors = approvedMentors.map((req) => req.mentorId);
+    // Run query
+    const approvedRequests = await query;
+
+    // Extract mentors list
+    let mentors = approvedRequests.map((req) => req.mentorId);
+
+    // ✅ Apply filters (on mentors.courses)
+    if (courseName || category) {
+      mentors = mentors.filter((mentor) =>
+        mentor.courses.some((c) => {
+          const matchCourse = courseName ? c.courseName === courseName : true;
+          const matchCategory = category ? c.category === category : true;
+          return matchCourse && matchCategory;
+        })
+      );
+    }
+
+    // ✅ Total after filter
+    const total = mentors.length;
+
+    // ✅ Pagination after filter
+    const paginatedMentors = mentors.slice(skip, skip + limit);
 
     res.status(200).json({
       success: true,
-      data: mentors,
+      data: paginatedMentors,
       pagination: {
         total,
         page,
