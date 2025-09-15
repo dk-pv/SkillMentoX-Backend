@@ -1,7 +1,6 @@
 
 
 import mongoose from "mongoose";
-
 const courseSchema = new mongoose.Schema({
   category: { type: String, required: true, trim: true },
   courseName: { type: String, required: true, trim: true },

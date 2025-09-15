@@ -10,4 +10,3 @@ const StudentRoutes = express.Router()
     .put("/updateprofile/:id",updateProfile);
 
 export default StudentRoutes;
-    
