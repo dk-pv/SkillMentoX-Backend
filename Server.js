@@ -11,6 +11,7 @@ import { initSocket } from "./socket.js";
 import adminRoutes from "./routes/adminRoutes.js";
 import subscriptionRoutes from "./routes/subscriptionRoutes.js"
 import studentRequestRoutes from "./routes/studentRequestRoutes.js"
+import courseRoutes from "./routes/courseRoutes.js";
 
 
 dotenv.config();
@@ -44,7 +45,7 @@ const server = createServer(app);
 initSocket(server);
 app.use("/api/students",StudentRoutes)
 app.use('/api/admin', adminRoutes)
-
+app.use("/api/courses", courseRoutes);
 
 const PORT = process.env.PORT || 9999;
 server.listen(PORT, () => {
