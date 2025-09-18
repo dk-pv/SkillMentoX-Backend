@@ -21,7 +21,6 @@ const userSchema = new mongoose.Schema({
   otpExpires: Date,
   isVerified: { type: Boolean, default: false },
 
-
   isPremium: { type: Boolean, default: false },
   stripeCustomerId: { type: String },     
   subscriptionId: { type: String },       
