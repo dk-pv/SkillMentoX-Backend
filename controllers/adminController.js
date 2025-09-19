@@ -162,3 +162,29 @@ export const getApprovedMentors = async (req, res) => {
     });
   }
 };
+
+
+
+
+// mentors count 
+export const getApprovedMentorsCount = async (req, res) => {
+  try {
+    const requestFilter = {
+      status: "approved",
+      isDeleted: false,
+    };
+
+    const count = await MentorRequest.countDocuments(requestFilter);
+
+    res.status(200).json({
+      success: true,
+      count,
+    });
+  } catch (error) {
+    console.error("Error fetching approved mentors count:", error);
+    res.status(500).json({
+      success: false,
+      message: "Server error",
+    });
+  }
+};

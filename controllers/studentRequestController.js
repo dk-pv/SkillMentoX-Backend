@@ -9,6 +9,7 @@ export const createRequest = async (req, res) => {
 
         const student = await User.findById(studentId);
         if (!student) return res.status(404).json({ message: "Student not found" });
+
         const request = new StudentRequest({
             student: studentId,
             category,
@@ -25,7 +26,7 @@ export const createRequest = async (req, res) => {
     }
 };
 
-
+// Get requests (Admin side)
 export const getAllRequests = async (req, res) => {
     try {
         const requests = await StudentRequest.find()
@@ -48,6 +49,7 @@ export const getMyRequests = async (req, res) => {
             "assignedMentor",
             "name expertise"
         );
+
         res.json({ requests });
     } catch (err) {
         console.error("Error fetching student requests:", err);
@@ -55,7 +57,7 @@ export const getMyRequests = async (req, res) => {
     }
 };
 
-
+// Update request (Admin accepts + assigns mentor)
 export const updateRequestStatus = async (req, res) => {
     try {
         const { id } = req.params;

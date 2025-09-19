@@ -300,3 +300,17 @@ export const resetPassword = async (req, res) => {
   }
 };
 
+// Get count of verified users
+export const getVerifiedUsersCount = async (req, res) => {
+  try {
+    const count = await User.countDocuments({ isVerified: true });
+
+    res.json({
+      success: true,
+      verifiedUsersCount: count,
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Server error" });
+  }
+};

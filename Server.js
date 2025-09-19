@@ -28,7 +28,7 @@ app.use(
     methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
     allowedHeaders: ["Content-Type", "Authorization"],
   })
-);
+)
 
 app.use(express.json({ limit: "10mb" }));
 app.use(express.urlencoded({ limit: "10mb", extended: true }));
@@ -41,8 +41,9 @@ app.use("/api/chat", chatRoutes);
 app.use("/api/subscription", subscriptionRoutes);
 app.use("/api/requests", studentRequestRoutes);
 
-const server = createServer(app);
-initSocket(server);
+const server = createServer(app)
+
+initSocket(server)
 app.use("/api/students",StudentRoutes)
 app.use('/api/admin', adminRoutes)
 app.use("/api/courses", courseRoutes);
