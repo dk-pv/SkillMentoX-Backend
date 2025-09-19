@@ -3,6 +3,7 @@ import mongoose from "mongoose";
 import Mentor from "../models/mentor.js";
 import MentorRequest from "../models/MentorRequest.js";
 
+  
 export const getMentorRequests = async (req, res) => {
   try {
     const page = parseInt(req.query.page) || 1; // default page 1
@@ -156,6 +157,32 @@ export const getApprovedMentors = async (req, res) => {
     });
   } catch (error) {
     console.error("Error fetching approved mentors:", error);
+    res.status(500).json({
+      success: false,
+      message: "Server error",
+    });
+  }
+};
+
+
+
+
+// mentors count 
+export const getApprovedMentorsCount = async (req, res) => {
+  try {
+    const requestFilter = {
+      status: "approved",
+      isDeleted: false,
+    };
+
+    const count = await MentorRequest.countDocuments(requestFilter);
+
+    res.status(200).json({
+      success: true,
+      count,
+    });
+  } catch (error) {
+    console.error("Error fetching approved mentors count:", error);
     res.status(500).json({
       success: false,
       message: "Server error",
