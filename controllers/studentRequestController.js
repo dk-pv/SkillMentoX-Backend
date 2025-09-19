@@ -1,14 +1,16 @@
 import StudentRequest from "../models/studentRequest.js";
 import User from "../models/User.js";
 
-
+// Create request (Student side)
 export const createRequest = async (req, res) => {
     try {
-        const { category,stack } = req.body;
+        const { category, stack } = req.body;
         const studentId = req.user.id;
 
         const student = await User.findById(studentId);
-        if (!student) return res.status(404).json({ message: "Student not found" });
+        if (!student) {
+            return res.status(404).json({ message: "Student not found" });
+        }
 
         const request = new StudentRequest({
             student: studentId,
@@ -22,7 +24,10 @@ export const createRequest = async (req, res) => {
         res.status(201).json({ message: "Request created", request });
     } catch (err) {
         console.error("Error creating request:", err);
-        res.status(500).json({ message: "Internal server error" });
+        res.status(500).json({
+            message: "Internal server error",
+            error: err.message,   // 👈 show error in response
+        });
     }
 };
 
@@ -36,7 +41,10 @@ export const getAllRequests = async (req, res) => {
         res.json({ requests });
     } catch (err) {
         console.error("Error fetching requests:", err);
-        res.status(500).json({ message: "Internal server error" });
+        res.status(500).json({
+            message: "Internal server error",
+            error: err.message,
+        });
     }
 };
 
@@ -45,15 +53,16 @@ export const getMyRequests = async (req, res) => {
     try {
         const studentId = req.user.id;
 
-        const requests = await StudentRequest.find({ student: studentId }).populate(
-            "assignedMentor",
-            "name expertise"
-        );
+        const requests = await StudentRequest.find({ student: studentId })
+            .populate("assignedMentor", "name expertise");
 
         res.json({ requests });
     } catch (err) {
         console.error("Error fetching student requests:", err);
-        res.status(500).json({ message: "Internal server error" });
+        res.status(500).json({
+            message: "Internal server error",
+            error: err.message,
+        });
     }
 };
 
@@ -64,7 +73,9 @@ export const updateRequestStatus = async (req, res) => {
         const { status, mentorId, notes } = req.body;
 
         const request = await StudentRequest.findById(id);
-        if (!request) return res.status(404).json({ message: "Request not found" });
+        if (!request) {
+            return res.status(404).json({ message: "Request not found" });
+        }
 
         request.status = status || request.status;
         if (mentorId) request.assignedMentor = mentorId;
@@ -75,6 +86,9 @@ export const updateRequestStatus = async (req, res) => {
         res.json({ message: "Request updated", request });
     } catch (err) {
         console.error("Error updating request:", err);
-        res.status(500).json({ message: "Internal server error" });
+        res.status(500).json({
+            message: "Internal server error",
+            error: err.message,
+        });
     }
 };

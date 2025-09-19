@@ -4,7 +4,7 @@ const studentRequestSchema = new mongoose.Schema(
     {
         student: {
             type: mongoose.Schema.Types.ObjectId,
-            ref: "Student",
+            ref: "User",
             required: true,
         },
         category: {
@@ -24,7 +24,7 @@ const studentRequestSchema = new mongoose.Schema(
         },
         assignedMentor: {
             type: mongoose.Schema.Types.ObjectId,
-            ref: "Mentor",
+            ref: "User",
             default: null,
         },
         notes: {
