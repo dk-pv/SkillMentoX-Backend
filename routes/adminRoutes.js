@@ -1,6 +1,7 @@
 import express from 'express'
-import { getMentorRequests, getMentorDetails, updateMentorRequestStatus ,getApprovedMentors , getApprovedMentorsCount} from '../controllers/adminController.js';
+import { getMentorRequests, getMentorDetails, updateMentorRequestStatus ,getApprovedMentors , getApprovedMentorsCount ,getValidStudents} from '../controllers/AdminController.js';
 import {getVerifiedUsersCount} from '../controllers/authController.js'
+import {updateRequestStatus , assignMentorToRequest} from '../controllers/studentRequestController.js'
 import { protect , authorize } from '../middleware/authMiddleware.js';
 
 const router = express.Router()
@@ -45,6 +46,11 @@ router.get("/approved-mentors" , protect , authorize('admin') , getApprovedMento
 router.get("/approved/count", protect , authorize('admin') , getApprovedMentorsCount)
 router.get("/totalUsers", protect , authorize('admin') , getVerifiedUsersCount)
 
+
+
+router.put("/:id/status",  protect , authorize('admin') ,  updateRequestStatus);
+router.put("/:id/assign-mentor",  protect , authorize('admin') ,  assignMentorToRequest);
+router.get("/students/valid", protect, authorize("admin"), getValidStudents);
 
 
 export default router;

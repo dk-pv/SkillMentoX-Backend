@@ -14,7 +14,7 @@ const studentRequestSchema = new mongoose.Schema(
         },
         status: {
             type: String,
-            enum: ["pending", "accepted"],
+            enum: ["pending", "approved"],
             default: "pending",
         },
         stack: {
@@ -24,7 +24,7 @@ const studentRequestSchema = new mongoose.Schema(
         },
         assignedMentor: {
             type: mongoose.Schema.Types.ObjectId,
-            ref: "User",
+            ref: "Mentor",
             default: null,
         },
         notes: {

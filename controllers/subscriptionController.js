@@ -1,6 +1,8 @@
 import Student from "../models/StudentProfile.js";
 import stripe from "../utils/stripe.js";
 
+
+//
 export const createCheckoutSession = async (req, res) => {
     try {
             const { priceId, subscriptionType, category, stack } = req.body;

@@ -48,7 +48,7 @@ const mentorSchema = new mongoose.Schema(
       cv: [{ type: String }], 
      
     },
-    verificationStatus: {
+    status: {
       type: String,
       enum: ["Pending", "approved", "Rejected"],
       default: "Pending",

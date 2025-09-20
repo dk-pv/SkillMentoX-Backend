@@ -2,6 +2,8 @@ import { sendEmail } from "../utils/sendMail.js";
 import mongoose from "mongoose";
 import Mentor from "../models/mentor.js";
 import MentorRequest from "../models/MentorRequest.js";
+import StudentRequest from "../models/studentRequest.js";
+
 
   
 export const getMentorRequests = async (req, res) => {
@@ -139,10 +141,8 @@ export const getApprovedMentors = async (req, res) => {
       );
     }
 
-    // ✅ Total after filter
     const total = mentors.length;
 
-    // ✅ Pagination after filter
     const paginatedMentors = mentors.slice(skip, skip + limit);
 
     res.status(200).json({
@@ -167,7 +167,6 @@ export const getApprovedMentors = async (req, res) => {
 
 
 
-// mentors count 
 export const getApprovedMentorsCount = async (req, res) => {
   try {
     const requestFilter = {
@@ -186,6 +185,32 @@ export const getApprovedMentorsCount = async (req, res) => {
     res.status(500).json({
       success: false,
       message: "Server error",
+    });
+  }
+};
+
+
+
+
+export const getValidStudents = async (req, res) => {
+  try {
+    const validStudents = await StudentRequest.find({
+      status: "approved",          // ✅ only approved students
+      assignedMentor: { $ne: null } // ✅ mentor assigned
+    })
+      .populate("student", "name email")  // student basic details
+      .populate("assignedMentor", "fullName expertise"); // mentor basic details
+
+    res.json({
+      success: true,
+      students: validStudents,
+    });
+  } catch (err) {
+    console.error("Error fetching valid students:", err);
+    res.status(500).json({
+      success: false,
+      message: "Internal server error",
+      error: err.message,
     });
   }
 };
