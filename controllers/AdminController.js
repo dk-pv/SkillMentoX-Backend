@@ -3,7 +3,8 @@ import mongoose from "mongoose";
 import Mentor from "../models/mentor.js";
 import MentorRequest from "../models/MentorRequest.js";
 import StudentRequest from "../models/studentRequest.js";
-
+import StudentProfile from "../models/StudentProfile.js";
+import User from "../models/User.js";
 
   
 export const getMentorRequests = async (req, res) => {
@@ -35,6 +36,7 @@ export const getMentorRequests = async (req, res) => {
     res.status(500).json({ success: false, message: err.message });
   }
 };
+
 
 export const updateMentorRequestStatus = async (req, res) => {
   const { id } = req.params;
@@ -212,5 +214,14 @@ export const getValidStudents = async (req, res) => {
       message: "Internal server error",
       error: err.message,
     });
+  }
+};
+
+export const getAllStudents = async (req, res) => {
+  try {
+    const profiles = await StudentProfile.find();
+    res.json(profiles);
+  } catch (err) {
+    res.status(400).json({ error: err.message });
   }
 };

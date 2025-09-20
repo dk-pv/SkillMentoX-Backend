@@ -14,7 +14,9 @@ const studentRequestSchema = new mongoose.Schema(
         },
         status: {
             type: String,
+
             enum: ["pending", "approved"],
+
             default: "pending",
         },
         stack: {
@@ -31,6 +33,22 @@ const studentRequestSchema = new mongoose.Schema(
             type: String,
             trim: true,
         },
+        replies: [{
+            mentor: {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: "Mentor",
+                required: true,
+            },
+            text: {
+                type: String,
+                required: true,
+                trim: true,
+            },
+            time: {
+                type: Date,
+                default: Date.now,
+            },
+        }],
         requestedAt: {
             type: Date,
             default: Date.now,
@@ -44,13 +62,14 @@ const studentRequestSchema = new mongoose.Schema(
     {
         timestamps: true,
     }
+    
 );
 
 studentRequestSchema.pre("save", function (next) {
     this.updatedAt = Date.now();
     next();
+
 });
 
 const StudentRequest = mongoose.model("StudentRequest", studentRequestSchema);
-
 export default StudentRequest;

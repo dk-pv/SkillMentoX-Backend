@@ -1,9 +1,8 @@
-
-
 import mongoose from "mongoose";
 const courseSchema = new mongoose.Schema({
   category: { type: String, required: true, trim: true },
   courseName: { type: String, required: true, trim: true },
+ 
 });
 
 const mentorSchema = new mongoose.Schema(
@@ -29,7 +28,7 @@ const mentorSchema = new mongoose.Schema(
       },
     ],
     certifications: [{ type: String, trim: true }],
-    courses: [courseSchema],
+    courses:[courseSchema],
 
     email: { type: String, required: true, lowercase: true, trim: true },
     linkedin: { type: String, trim: true },

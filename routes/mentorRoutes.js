@@ -2,7 +2,14 @@ import express from "express";
 import {
   createOrUpdateMentorProfile,
   deleteMentorDocument,
+  getMentorRequests,
+  approveMentorRequest,
+  rejectMentorRequest,
+  createMentorRequest,
+  getMentorDetails,
+  getApprovedStudents,
   getMentorProfile,
+
 } from "../controllers/mentorController.js";
 import { protect, authorize } from "../middleware/authMiddleware.js";
 import upload from "../middleware/upload.js";
@@ -34,5 +41,15 @@ router.delete("/document", protect, authorize("mentor"), deleteMentorDocument);
 
 
 
+
+router.get("/getMentorDetails/:id", protect, authorize("admin"), getMentorDetails);
+
+
+router.delete("/document", protect, authorize("mentor"), deleteMentorDocument);
+router.post("/mentor-request", protect, createMentorRequest);
+router.get("/mentor-requests", protect, getMentorRequests);
+router.patch("/mentor-requests/:id/appro",protect,authorize("admin"),approveMentorRequest);
+router.patch("/mentor-requests/:id/reject",protect,authorize("admin"),rejectMentorRequest);
+router.get('/approved-students', authorize("admin"), getApprovedStudents);
 
 export default router;

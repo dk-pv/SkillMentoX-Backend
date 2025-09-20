@@ -216,3 +216,72 @@ export const assignMentorToRequest = async (req, res) => {
         res.status(500).json({ success: false, message: error.message });
     }
 };
+
+// Get assigned requests (Mentor side)
+export const getAssignedRequests = async (req, res) => {
+    try {
+        const mentorId = req.user.id;
+
+        const requests = await StudentRequest.find({ assignedMentor: mentorId })
+            .populate("student", "name email")
+            .populate("assignedMentor", "fullName")
+            .populate("replies.mentor", "fullName");
+
+        res.json({ requests });
+    } catch (err) {
+        console.error("Error fetching assigned requests:", err);
+        res.status(500).json({ message: "Internal server error" });
+    }
+};
+
+// Reply to request (Mentor side)
+export const replyToRequest = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { text } = req.body;
+        const mentorId = req.user.id;
+
+        const request = await StudentRequest.findById(id);
+        if (!request) return res.status(404).json({ message: "Request not found" });
+
+        if (request.assignedMentor.toString() !== mentorId) {
+            return res.status(403).json({ message: "Not authorized to reply to this request" });
+        }
+
+        request.replies.push({
+            mentor: mentorId,
+            text,
+            time: new Date(),
+        });
+
+        await request.save();
+
+        res.json({ message: "Reply added", request });
+    } catch (err) {
+        console.error("Error replying to request:", err);
+        res.status(500).json({ message: "Internal server error" });
+    }
+};
+
+// Mark request as resolved (Mentor side)
+export const markRequestResolved = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const mentorId = req.user.id;
+
+        const request = await StudentRequest.findById(id);
+        if (!request) return res.status(404).json({ message: "Request not found" });
+
+        if (request.assignedMentor.toString() !== mentorId) {
+            return res.status(403).json({ message: "Not authorized to update this request" });
+        }
+
+        request.status = "resolved";
+        await request.save();
+
+        res.json({ message: "Request marked as resolved", request });
+    } catch (err) {
+        console.error("Error marking request resolved:", err);
+        res.status(500).json({ message: "Internal server error" });
+    }
+};

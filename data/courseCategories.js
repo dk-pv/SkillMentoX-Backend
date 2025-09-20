@@ -10,5 +10,7 @@ export const courseCategories = {
       "Ruby on Rails + React",
       "T3 Stack (Next.js + Prisma + tRPC + Tailwind)"
     ]
+
   }
+
 };

@@ -4,6 +4,9 @@ import {
     getAllRequests,
     getMyRequests,
     updateRequestStatus,
+    getAssignedRequests,
+    replyToRequest,
+    markRequestResolved,
 } from "../controllers/studentRequestController.js";
 import { protect, authorize } from "../middleware/authMiddleware.js";
 

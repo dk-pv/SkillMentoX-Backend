@@ -19,8 +19,6 @@ const mentorRequestSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-const MentorRequest =
-  mongoose.models.MentorRequest ||
-  mongoose.model("MentorRequest", mentorRequestSchema);
+const MentorRequest =mongoose.models.MentorRequest ||mongoose.model("MentorRequest", mentorRequestSchema);
 
 export default MentorRequest;
